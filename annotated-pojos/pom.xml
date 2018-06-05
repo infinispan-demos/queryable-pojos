@@ -13,6 +13,8 @@
 
    <properties>
       <infinispan.version>9.3.0.CR1</infinispan.version>
+      <maven.compiler.source>1.8</maven.compiler.source>
+      <maven.compiler.target>1.8</maven.compiler.target>
 
       <junit.version>4.12</junit.version>
    </properties>
