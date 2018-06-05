@@ -12,6 +12,7 @@
 
    <modules>
       <module>annotated-pojos</module>
+      <module>plain-pojos</module>
    </modules>
 
 </project>

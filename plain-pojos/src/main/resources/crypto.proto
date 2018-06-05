@@ -1,0 +1,9 @@
+package plain.pojos;
+
+message CryptoCurrency {
+
+    required string description = 10;
+
+    required uint32 rank = 20;
+
+}
