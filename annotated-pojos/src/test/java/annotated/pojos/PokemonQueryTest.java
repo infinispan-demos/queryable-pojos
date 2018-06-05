@@ -55,6 +55,7 @@ public class PokemonQueryTest {
 
       QueryFactory queryFactory = Search.getQueryFactory(cache);
 
+      // TODO: How to add package name?
       Query query = queryFactory.create("FROM Pokemon p where p.type1 = :type");
       query.setParameter("type", "FIRE");
       List<Pokemon> fireTypePokemons = query.list();
