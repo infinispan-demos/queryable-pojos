@@ -13,12 +13,11 @@ import org.infinispan.query.dsl.QueryFactory;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.infinispan.query.remote.client.ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX;
 import static org.infinispan.query.remote.client.ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
+import static org.junit.Assert.assertEquals;
 
 public class PokemonQueryTest {
 
@@ -40,7 +39,7 @@ public class PokemonQueryTest {
       // Clear cache
       cache.clear();
 
-      // Add proto file for indexed pojo to server and client
+      // Add proto file for indexed pojo to server
       addProtofileMetadata(remote);
 
       cache.put(4, new Pokemon("Charmander", "FIRE"));
@@ -50,15 +49,20 @@ public class PokemonQueryTest {
       cache.put(116, new Pokemon("Horsea", "WATER"));
       cache.put(136, new Pokemon("Flareon", "FIRE"));
 
-      System.out.printf("Pokemon with id %d is: %s%n", 25, cache.get(25));
-      System.out.printf("Stored %d pokemons%n", cache.size());
+      final Pokemon pikachu = cache.get(25);
+      assertEquals("Pikachu", pikachu.name);
+
+      final int size = cache.size();
+      assertEquals(6, size);
 
       QueryFactory queryFactory = Search.getQueryFactory(cache);
 
       // TODO: How to add package name?
       Query query = queryFactory.create("FROM Pokemon p where p.type1 = :type");
       query.setParameter("type", "FIRE");
+
       List<Pokemon> fireTypePokemons = query.list();
+      assertEquals(3, fireTypePokemons.size());
       System.out.printf("Fire type pokemons are: %s%n", fireTypePokemons);
    }
 
@@ -80,12 +84,11 @@ public class PokemonQueryTest {
 
          metadataCache.put(fileName, protoFile);
 
-
          String errors = metadataCache.get(ERRORS_KEY_SUFFIX);
          if (errors != null)
-            throw new AssertionError("Error in proto file");
+            throw new AssertionError("Error in proto file: " + fileName);
          else
-            System.out.println("Added indexed file " + fileName);
+            System.out.println("Added indexed file: " + fileName);
       } catch (IOException e) {
          throw new AssertionError(e);
       }
