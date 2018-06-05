@@ -10,7 +10,6 @@ public class Pokemon {
    String name;
 
    @ProtoField(number = 20)
-   @ProtoDoc("@Field(index = Index.YES, store = Store.NO)")
    String type1;
 
    public Pokemon() {

@@ -2,14 +2,20 @@ package annotated.pojos;
 
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
+import org.infinispan.client.hotrod.Search;
 import org.infinispan.client.hotrod.configuration.ClientIntelligence;
 import org.infinispan.client.hotrod.configuration.ConfigurationBuilder;
 import org.infinispan.client.hotrod.marshall.ProtoStreamMarshaller;
 import org.infinispan.protostream.SerializationContext;
 import org.infinispan.protostream.annotations.ProtoSchemaBuilder;
+import org.infinispan.query.dsl.Query;
+import org.infinispan.query.dsl.QueryFactory;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.infinispan.query.remote.client.ProtobufMetadataManagerConstants.ERRORS_KEY_SUFFIX;
 import static org.infinispan.query.remote.client.ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
@@ -31,6 +37,9 @@ public class PokemonQueryTest {
       RemoteCache<Integer, Pokemon> cache =
          remote.administration().getOrCreateCache("pokemons", "indexed");
 
+      // Clear cache
+      cache.clear();
+
       // Add proto file for indexed pojo to server and client
       addProtofileMetadata(remote);
 
@@ -43,6 +52,13 @@ public class PokemonQueryTest {
 
       System.out.printf("Pokemon with id %d is: %s%n", 25, cache.get(25));
       System.out.printf("Stored %d pokemons%n", cache.size());
+
+      QueryFactory queryFactory = Search.getQueryFactory(cache);
+
+      Query query = queryFactory.create("FROM Pokemon p where p.type1 = :type");
+      query.setParameter("type", "FIRE");
+      List<Pokemon> fireTypePokemons = query.list();
+      System.out.printf("Fire type pokemons are: %s%n", fireTypePokemons);
    }
 
    private void addProtofileMetadata(RemoteCacheManager remote) {
