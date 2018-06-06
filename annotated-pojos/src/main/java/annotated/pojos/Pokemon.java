@@ -6,9 +6,11 @@ import org.infinispan.protostream.annotations.ProtoField;
 @ProtoDoc("@Indexed")
 public class Pokemon {
 
+   @ProtoDoc("@Field")
    @ProtoField(number = 10)
    String name;
 
+   @ProtoDoc("@Field")
    @ProtoField(number = 20)
    String type1;
 
