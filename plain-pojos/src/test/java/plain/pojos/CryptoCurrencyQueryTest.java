@@ -48,15 +48,15 @@ public class CryptoCurrencyQueryTest {
       cache.put("XRP", new CryptoCurrency("Ripple", 3));
       cache.put("CAT", new CryptoCurrency("Catcoin", 618));
 
-      assertEquals(cache.get("CAT").description, "Catcoin");
-      assertEquals(cache.size(), 4);
+      assertEquals("Catcoin", cache.get("CAT").description);
+      assertEquals(4, cache.size());
 
       QueryFactory queryFactory = Search.getQueryFactory(cache);
 
       Query query = queryFactory.create("FROM plain.pojos.CryptoCurrency c where c.rank < 10");
       List<CryptoCurrency> highRankCoins = query.list();
 
-      assertEquals(highRankCoins.size(), 3);
+      assertEquals(3, highRankCoins.size());
       System.out.printf("Highest ranked crypto currencies are: %s%n", highRankCoins);
    }
 
