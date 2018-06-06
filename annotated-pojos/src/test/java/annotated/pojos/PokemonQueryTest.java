@@ -57,8 +57,7 @@ public class PokemonQueryTest {
 
       QueryFactory queryFactory = Search.getQueryFactory(cache);
 
-      // TODO: How to add package name?
-      Query query = queryFactory.create("FROM Pokemon p where p.type1 = :type");
+      Query query = queryFactory.create("FROM annotated.pojos.Pokemon p where p.type1 = :type");
       query.setParameter("type", "FIRE");
 
       List<Pokemon> fireTypePokemons = query.list();
@@ -80,6 +79,7 @@ public class PokemonQueryTest {
          String protoFile = protoSchemaBuilder
             .fileName(fileName)
             .addClass(Pokemon.class)
+            .packageName(Pokemon.class.getPackage().getName())
             .build(serialCtx);
 
          metadataCache.put(fileName, protoFile);
