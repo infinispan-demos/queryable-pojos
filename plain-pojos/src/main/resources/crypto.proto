@@ -1,9 +1,18 @@
 package plain.pojos;
 
+/**
+ * @Indexed
+ */
 message CryptoCurrency {
 
+    /**
+     * @Field
+     */
     required string description = 10;
 
+    /**
+     * @Field
+     */
     required uint32 rank = 20;
 
 }
