@@ -39,13 +39,13 @@ public class CryptoCurrency {
       }
 
       @Override
-      public Class<? extends CryptoCurrency> getJavaClass() {
+      public Class<CryptoCurrency> getJavaClass() {
          return CryptoCurrency.class;
       }
 
       @Override
       public String getTypeName() {
-         return CryptoCurrency.class.getName();
+         return "plain.pojos.CryptoCurrency";
       }
 
    }

@@ -57,7 +57,7 @@ public class PokemonQueryTest {
 
       QueryFactory queryFactory = Search.getQueryFactory(cache);
 
-      Query query = queryFactory.create("FROM annotated.pojos.Pokemon p where p.type1 = :type");
+      Query query = queryFactory.create("FROM pokemons.Pokemon p where p.type1 = :type");
       query.setParameter("type", "FIRE");
 
       List<Pokemon> fireTypePokemons = query.list();
@@ -79,16 +79,16 @@ public class PokemonQueryTest {
          String protoFile = protoSchemaBuilder
             .fileName(fileName)
             .addClass(Pokemon.class)
-            .packageName(Pokemon.class.getPackage().getName())
+            .packageName("pokemons")
             .build(serialCtx);
 
          metadataCache.put(fileName, protoFile);
 
-         String errors = metadataCache.get(ERRORS_KEY_SUFFIX);
-         if (errors != null)
-            throw new AssertionError("Error in proto file: " + fileName);
+         String filesWithErrors = metadataCache.get(ERRORS_KEY_SUFFIX);
+         if (filesWithErrors != null)
+            throw new AssertionError("Error in proto file(s): " + filesWithErrors);
          else
-            System.out.println("Added indexed file: " + fileName);
+            System.out.println("Added schema file: " + fileName);
       } catch (IOException e) {
          throw new AssertionError(e);
       }
