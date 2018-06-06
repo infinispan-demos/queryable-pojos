@@ -14,10 +14,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.infinispan.query.remote.client.ProtobufMetadataManagerConstants.PROTOBUF_METADATA_CACHE_NAME;
 import static org.junit.Assert.assertEquals;
@@ -69,40 +67,26 @@ public class CryptoCurrencyQueryTest {
       RemoteCache<String, String> metadataCache =
          remote.getCache(PROTOBUF_METADATA_CACHE_NAME);
 
-      try {
-         String protoFile = read(CryptoCurrencyQueryTest.class.getResourceAsStream("/crypto.proto"));
+      String protoFile = read(CryptoCurrencyQueryTest.class.getResourceAsStream("/crypto.proto"));
 
-         metadataCache.put("crypto.proto", protoFile);
+      metadataCache.put("crypto.proto", protoFile);
 
-         String errors = metadataCache.get(".errors");
-         if (errors != null)
-            throw new AssertionError("Errors found in proto file: " + errors);
-      } catch (IOException e) {
-         throw new AssertionError(e);
-      }
+      String filesWithErrors = metadataCache.get(".errors");
+      if (filesWithErrors != null)
+         throw new AssertionError("Errors found in proto file(s): " + filesWithErrors);
 
       // Client side
       try {
-         serialCtx.registerProtoFiles(FileDescriptorSource.fromResources("crypto.proto"));
+         serialCtx.registerProtoFiles(FileDescriptorSource.fromResources("/crypto.proto"));
          serialCtx.registerMarshaller(new CryptoCurrency.Marshaller());
       } catch (IOException e) {
          throw new AssertionError(e);
       }
    }
 
-   private static String read(InputStream is) throws IOException {
-      try {
-         final Reader reader = new InputStreamReader(is, "UTF-8");
-         StringWriter writer = new StringWriter();
-         char[] buf = new char[1024];
-         int len;
-         while ((len = reader.read(buf)) != -1) {
-            writer.write(buf, 0, len);
-         }
-         return writer.toString();
-      } finally {
-         is.close();
+   private static String read(InputStream is) {
+      try (Scanner scanner = new Scanner(is, "UTF-8")) {
+         return scanner.useDelimiter("\\A").next();
       }
    }
-
 }
