@@ -53,7 +53,7 @@ public class CryptoCurrencyQueryTest {
 
       QueryFactory queryFactory = Search.getQueryFactory(cache);
 
-      Query query = queryFactory.create("FROM plain.pojos.CryptoCurrency c where c.rank < 10");
+      Query query = queryFactory.create("FROM crypto.CryptoCurrency c where c.rank < 10");
       List<CryptoCurrency> highRankCoins = query.list();
 
       assertEquals(3, highRankCoins.size());

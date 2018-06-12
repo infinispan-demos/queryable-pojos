@@ -45,7 +45,7 @@ public class CryptoCurrency {
 
       @Override
       public String getTypeName() {
-         return "plain.pojos.CryptoCurrency";
+         return "crypto.CryptoCurrency";
       }
 
    }

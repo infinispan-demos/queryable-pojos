@@ -1,4 +1,4 @@
-package plain.pojos;
+package crypto;
 
 /**
  * @Indexed
