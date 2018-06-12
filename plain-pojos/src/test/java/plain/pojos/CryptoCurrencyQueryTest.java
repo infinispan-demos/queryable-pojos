@@ -11,6 +11,7 @@ import org.infinispan.protostream.SerializationContext;
 import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryFactory;
 import org.junit.Test;
+import plain.marshallers.CryptoCurrencyMarshaller;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,7 +79,7 @@ public class CryptoCurrencyQueryTest {
       // Client side
       try {
          serialCtx.registerProtoFiles(FileDescriptorSource.fromResources("/crypto.proto"));
-         serialCtx.registerMarshaller(new CryptoCurrency.Marshaller());
+         serialCtx.registerMarshaller(new CryptoCurrencyMarshaller());
       } catch (IOException e) {
          throw new AssertionError(e);
       }
